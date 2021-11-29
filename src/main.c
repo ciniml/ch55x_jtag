@@ -1542,7 +1542,7 @@ main()
 								Mpsse_LongLen |= (Ep2Buffer[USBOutPtr] << 8) & 0xff00;
 								USBOutPtr++;
 						#if GOWIN_INT_FLASH_QUIRK
-								if((Mpsse_LongLen == 25000 || Mpsse_LongLen == 750 || Mpsse_LongLen == 2968) && (instr & (1 << 5)) == 0)
+								if((Mpsse_LongLen == 0xb71b || Mpsse_LongLen == 0x0026 || Mpsse_LongLen == 0x0004 || Mpsse_LongLen == 25000 || Mpsse_LongLen == 750 || Mpsse_LongLen == 2968) && (instr & (1 << 5)) == 0)
 								{
 									SPI_OFF();
 									Run_Test_Start();
