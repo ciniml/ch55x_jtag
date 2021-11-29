@@ -1,54 +1,35 @@
-Features
-======
+# 概要
 
-An USB to JTAG Converter firmware running on CH552T, with some Gowin Quirks.
+Gowin RUNBER向けCH552T用JTAGファームウェア (Erase Flash修正版)
 
-Issues
---------------
+[オリジナルのCH552T用JTAGファームウェア](https://github.com/diodep/ch55x_jtag) に対して、Gowin RUNBERに搭載されている `GW1N-LV4` 向けのErase Flashが成功するようにする修正を入れたものです。
 
-Serial port is working but with some limitation. Because the CPU is running at 16MHz, generate 115200 baudrate is not possible. The fastest standard baudrate is 57600, you can use 125000 and up to 1Mbps baudrate.
+対策としては `Erase Flash` のみですので、 **実際にFlashに書き込むことは依然できません。** あくまでErase FlashによりSRAMにすら書き込めなくなった状態から復帰する・誤ってFlash書き込みを行った場合に書き込めなくなるのを防止する効果があるだけです。
 
-Pin layout
---------------
+# 使い方
 
-P1.0 - TMS
+`python3` がインストールされている環境で以下の手順を実行します。
 
-P1.4 & P1.7 - TCK
+1. 必要なパッケージをインストールする
 
-P1.5 - TDI
+```
+$ sudo python3 -mpip install pyusb ch55xtool
+```
 
-P1.6 - TDO
+2. Gowin RUNBERをPCに接続する
+3. このリポジトリのルートにある `to_dfu.py` を実行する
 
-P3.0 - RXD
+```
+$ python3 to_dfu.py
+Apply magic success.
+..CH552 is now in DFU mode.
+```
 
-P3.1 - TXD
+4. `ch55xtool` を使ってCH552Tのファームウェアを更新する。
 
+```
+$ sudo ch55xtool -f usb_jtag.bin -r
+```
 
-Boards
---------------
-
-Sipeed Lichee Tang Nano.
-
-Build
---------------
-
-It requires make, sdcc and binutils.
-
-If you got all of them, enter the src directory, and type "make" to generate binary file.
-
-Programming
---------------
-
-By WinchipHead's official WCHISPTOOL or LibreCH551 from rgwan. New chip with bootloader version > 2.30 may not working with librech551, it needs some fix.
-
-License
---------------
-
-MIT
-
-Authors
---------------
-
-Kongou Hikari <kongouhikari@qq.com>
-
-
+5. 書き込みが完了したら、Gowin RUNBERをUSBポートから取り外して再度接続する。
+6. GOWIN ProgrammerからErase Flashを実行する。
